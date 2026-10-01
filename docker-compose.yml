@@ -12,10 +12,11 @@ services:
     ports:
       - "${XUI_PORT:-8080}:8080"
       - "${XUI_SUBSCRIPTION_PORT:-2026}:2026"
-      # Add real Xray inbound ports as needed
+      # Add Xray inbound ports as needed:
       # - "443:443"
       # - "80:80"
     environment:
+      # Panel Configuration
       XUI_PORT: 8080
       XUI_SUBSCRIPTION_PORT: 2026
       XUI_DB_FOLDER: /app/data
@@ -24,18 +25,31 @@ services:
       XUI_LOG_LEVEL: info
       XUI_DEBUG: "false"
       XUI_ENABLE_FAIL2BAN: "true"
-      # Render compatibility
+      
+      # Render compatibility - automatically uses PORT if provided
       PORT: ${PORT:-}
+      
+      # Official Sanaei settings
+      XUI_IN_DOCKER: "true"
+      XUI_MAIN_FOLDER: /app
+      TZ: Asia/Tehran
+    
     volumes:
       - pompnet-data:/app/data
+    
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 30s
+    
     networks:
       - pompnet-network
+    
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
 
 volumes:
   pompnet-data:

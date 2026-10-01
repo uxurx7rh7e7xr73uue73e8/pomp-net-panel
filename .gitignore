@@ -1,21 +1,18 @@
+# Pomp Net Panel Repository
+
 # Dependencies
 node_modules/
 .pnpm-store/
-
-# Build outputs
 build/
-dist/
 *.exe
 *.dll
 *.so
-*.dylib
 
-# Local data and database
+# Local data
 data/
 *.db
 *.sqlite
 *.sqlite3
-/app-data
 
 # Environment
 .env
@@ -26,21 +23,13 @@ data/
 *.log
 logs/
 
-# IDE and OS
+# IDE
 .DS_Store
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
-.project
-.classpath
 
-# Temporary files
+# Temporary
 *.tmp
-*.temp
 .cache/
-
-# Docker
-.docker/
-.dockerignore
