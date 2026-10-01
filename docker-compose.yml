@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  pompnet-panel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        XUI_VERSION: v3.8.5
+    container_name: pompnet-panel
+    restart: unless-stopped
+    ports:
+      - "${XUI_PORT:-8080}:8080"
+      - "${XUI_SUBSCRIPTION_PORT:-2026}:2026"
+      # Add real Xray inbound ports as needed
+      # - "443:443"
+      # - "80:80"
+    environment:
+      XUI_PORT: 8080
+      XUI_SUBSCRIPTION_PORT: 2026
+      XUI_DB_FOLDER: /app/data
+      XUI_DB_TYPE: sqlite
+      XUI_INIT_WEB_BASE_PATH: /
+      XUI_LOG_LEVEL: info
+      XUI_DEBUG: "false"
+      XUI_ENABLE_FAIL2BAN: "true"
+      # Render compatibility
+      PORT: ${PORT:-}
+    volumes:
+      - pompnet-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - pompnet-network
+
+volumes:
+  pompnet-data:
+    driver: local
+
+networks:
+  pompnet-network:
+    driver: bridge

@@ -1,0 +1,17 @@
+.git
+.gitignore
+.github
+.vscode
+.idea
+node_modules
+npm-debug.log
+.env.local
+.env.*.local
+README.md
+*.md
+docs/
+tests/
+.DS_Store
+*.log
+data/
+.cache/
