@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  pompnet-panel:
+    build:
+      context: .
+      dockerfile: Dockerfile.railway
+    container_name: pompnet-panel
+    restart: always
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      # Railway provides PORT automatically
+      PORT: ${PORT:-8080}
+      XUI_PORT: ${PORT:-8080}
+      XUI_DB_FOLDER: ${XUI_DB_FOLDER:-/app/data}
+      XUI_DB_TYPE: sqlite
+      XUI_INIT_WEB_BASE_PATH: /
+      XUI_LOG_LEVEL: info
+      XUI_DEBUG: "false"
+      XUI_ENABLE_FAIL2BAN: "false"
+      TZ: Asia/Tehran
+    
+    volumes:
+      - pompnet-data:/app/data
+    
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  pompnet-data:
+
