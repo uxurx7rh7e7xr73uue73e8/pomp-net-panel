@@ -17,22 +17,22 @@ services:
       # - "80:80"
     environment:
       # Panel Configuration
-      XUI_PORT: 8080
-      XUI_SUBSCRIPTION_PORT: 2026
-      XUI_DB_FOLDER: /app/data
-      XUI_DB_TYPE: sqlite
-      XUI_INIT_WEB_BASE_PATH: /
-      XUI_LOG_LEVEL: info
-      XUI_DEBUG: "false"
-      XUI_ENABLE_FAIL2BAN: "true"
+      XUI_PORT: ${XUI_PORT:-8080}
+      XUI_SUBSCRIPTION_PORT: ${XUI_SUBSCRIPTION_PORT:-2026}
+      XUI_DB_FOLDER: ${XUI_DB_FOLDER:-/app/data}
+      XUI_DB_TYPE: ${XUI_DB_TYPE:-sqlite}
+      XUI_INIT_WEB_BASE_PATH: ${XUI_INIT_WEB_BASE_PATH:-/}
+      XUI_LOG_LEVEL: ${XUI_LOG_LEVEL:-info}
+      XUI_DEBUG: ${XUI_DEBUG:-false}
+      XUI_ENABLE_FAIL2BAN: ${XUI_ENABLE_FAIL2BAN:-true}
       
       # Render compatibility - automatically uses PORT if provided
       PORT: ${PORT:-}
       
       # Official Sanaei settings
       XUI_IN_DOCKER: "true"
-      XUI_MAIN_FOLDER: /app
-      TZ: Asia/Tehran
+      XUI_MAIN_FOLDER: "/app"
+      TZ: "Asia/Tehran"
     
     volumes:
       - pompnet-data:/app/data
@@ -42,7 +42,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 30s
+      start_period: 40s
     
     networks:
       - pompnet-network

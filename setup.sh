@@ -1,53 +1,108 @@
 #!/usr/bin/env bash
+# Pomp Net Panel - Complete Render Deployment Setup
+# This script sets up everything needed for Render deployment
+
 set -e
 
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  Pomp Net Panel - Setup Script"
-echo "  Based on official MHSanaei/3x-ui v3.8.5"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "╔════════════════════════════════════════════════════════════════════════════════╗"
+echo "║                       POMP NET PANEL - SETUP                                    ║"
+echo "║              Based on Official MHSanaei/3x-ui v3.8.5                           ║"
+echo "║                     Production Ready - Real Xray                                ║"
+echo "╚════════════════════════════════════════════════════════════════════════════════╝"
 echo ""
 
-echo "[1/5] Creating directories..."
-mkdir -p scripts data logs
-chmod 755 scripts
+echo "📋 Checking Prerequisites..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-echo "[2/5] Setting executable permissions..."
-chmod +x scripts/*.sh 2>/dev/null || true
-
-echo "[3/5] Verifying Docker..."
+# Check Docker
 if ! command -v docker &> /dev/null; then
-    echo "ERROR: Docker not found. Please install Docker first."
+    echo "❌ Docker not found. Please install Docker first."
+    echo "   Visit: https://docs.docker.com/get-docker/"
     exit 1
 fi
-echo "✓ Docker found: $(docker --version)"
+echo "✅ Docker: $(docker --version)"
 
-echo "[4/5] Verifying Docker Compose..."
+# Check Docker Compose
 if ! command -v docker compose &> /dev/null; then
-    echo "ERROR: Docker Compose not found. Please install it."
+    echo "❌ Docker Compose not found. Please install it."
     exit 1
 fi
-echo "✓ Docker Compose found: $(docker compose version)"
+echo "✅ Docker Compose: $(docker compose version | head -1)"
 
-echo "[5/5] Configuration ready."
+# Check Git
+if ! command -v git &> /dev/null; then
+    echo "⚠️  Git not found. You'll need it for Render deployment."
+else
+    echo "✅ Git: $(git --version)"
+fi
+
 echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  Ready to deploy!"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "📁 Creating Directory Structure..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+mkdir -p scripts logs data
+chmod 755 scripts
+echo "✅ Directories created"
+
 echo ""
-echo "Next steps:"
+echo "🔧 Setting Up Configuration..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+if [ ! -f .env ]; then
+    cp .env.example .env
+    echo "✅ .env created from .env.example"
+else
+    echo "✅ .env already exists"
+fi
+
 echo ""
-echo "  For VPS deployment:"
-echo "    docker compose up -d"
+echo "🎯 Final Checks..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+if [ -f Dockerfile ]; then
+    echo "✅ Dockerfile found"
+else
+    echo "❌ Dockerfile not found"
+    exit 1
+fi
+
+if [ -f docker-compose.yml ]; then
+    echo "✅ docker-compose.yml found"
+else
+    echo "❌ docker-compose.yml not found"
+    exit 1
+fi
+
 echo ""
-echo "  Access panel at:"
-echo "    http://localhost:8080"
+echo "╔════════════════════════════════════════════════════════════════════════════════╗"
+echo "║                         ✅ SETUP COMPLETE                                       ║"
+echo "╚════════════════════════════════════════════════════════════════════════════════╝"
 echo ""
-echo "  Default credentials:"
-echo "    Username: admin"
-echo "    Password: admin"
+echo "🚀 Next Steps:"
 echo ""
-echo "  For Render deployment:"
-echo "    1. Push this repo to GitHub"
-echo "    2. Create Web Service on Render"
-echo "    3. Add Persistent Disk at /app/data"
+echo "   1️⃣  For Local Testing (VPS/Linux):"
+echo "      docker compose up -d"
+echo ""
+echo "   2️⃣  For Render Deployment:"
+echo "      • Push to GitHub"
+echo "      • Create Web Service on Render"
+echo "      • Add Persistent Disk at /app/data"
+echo ""
+echo "   3️⃣  Access Panel:"
+echo "      • Local: http://localhost:8080"
+echo "      • Render: https://your-render-domain.onrender.com"
+echo ""
+echo "   📝 Default Credentials:"
+echo "      • Username: admin"
+echo "      • Password: admin"
+echo "      ⚠️  Change password immediately after first login!"
+echo ""
+echo "📖 Documentation:"
+echo "   • Persian: DEPLOYMENT_GUIDE_FA.md"
+echo "   • English: DEPLOYMENT_GUIDE_EN.md"
+echo ""
+echo "💬 Support:"
+echo "   • Telegram: https://t.me/NovaTunneli"
+echo "   • Issues: Check DEPLOYMENT_GUIDE_FA.md for troubleshooting"
 echo ""
